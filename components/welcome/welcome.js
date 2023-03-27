@@ -15,10 +15,14 @@ export default function Welcome({navigation}){
         <Text style = {styles.phare} >
             Aprenda a sua materia de forma rápida e eficiente!
         </Text>
-
-        <TouchableOpacity>
-            <Text style={styles.WelcomeButton} onPress={e=>navigation.navigate('Home')}>Continuar</Text>
-        </TouchableOpacity>
+        <View style = {styles.buttons}>
+            <TouchableOpacity>
+                <Text style={styles.cards} onPress={e=>navigation.navigate('Home')}>Cards</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+                <Text style={styles.criar} onPress={e=>navigation.navigate('Home')}>Criar</Text>
+            </TouchableOpacity>
+        </View>
 
     </View>
 
@@ -39,16 +43,33 @@ const styles = StyleSheet.create({
         fontFamily:'sans-serif-medium'
     },
     phare:{
-       fontSize:20,
-       marginHorizontal:10,
-       textAlign:'center',
-       fontFamily:'sans-serif-medium'
+        fontSize:20,
+        marginHorizontal:10,
+        textAlign:'center',
+        fontFamily:'sans-serif-medium',
     },
-    WelcomeButton:{
-       fontFamily:'sans-serif-medium',
-       padding:15,
-       backgroundColor:'#516090',
-       fontSize:25
+    buttons:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    cards:{
+        fontFamily:'sans-serif-medium',
+        padding:15,
+        backgroundColor:'#516090',
+        fontSize:25,
+        borderRadius: 7,
+        elevation: 5,
+        marginHorizontal:25,
+    },
+    criar:{
+        marginHorizontal:25,
+        fontFamily:'sans-serif-medium',
+        padding:15,
+        backgroundColor:'#516090',
+        fontSize:25,
+        borderRadius: 7,
+        elevation: 5,
     }
+    
 
 })
