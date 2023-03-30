@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
+import paletteColor from '../PaletteColor/paletteColor'
 
-export default function Home(){
+export default function Home({navigation}){
 
     const [areas,setAreas] = useState({
         'Conhecimentos Básicos':["Portugues","ingles","Matemática","Atualidades do Mercado Financeiro"],
@@ -11,7 +12,7 @@ export default function Home(){
     const [showSection,setShowSection] = useState([false,false])
 
     const buttonSections = (index) =>{
-        var newArray = index===0?[!showSection[0],showSection[1]]:[showSection[0],!showSection[1] ] //React native checks for state changes by looking at the changes of state variable ref, not by array value changes.
+        var newArray = index === 0 ? [!showSection[0],showSection[1]] : [showSection[0],!showSection[1] ] //React native checks for state changes by looking at the changes of state variable ref, not by array value changes.
         setShowSection(newArray);
     }
 
@@ -20,6 +21,7 @@ export default function Home(){
         <Text style = {styles.homeTitle}>Flashcard</Text>
         <Text style = {styles.homeSubTitle}>Focado para o Banco do Brasil</Text>
         <View style = {styles.container}>
+        
             
             {
                 Object.keys(areas).map((areaKey,i) =>
@@ -31,7 +33,7 @@ export default function Home(){
 
                     {showSection[i] ? areas[areaKey].map( (materia,j) =>
                         <View key={j}> 
-                            <TouchableOpacity onPress = {e=>console.log(materia)}  > 
+                            <TouchableOpacity onPress = {e=>navigation.navigate('makeQuestion',{materia})}  > 
                                 <Text key={j} style={styles.materiaButton} > {materia} </Text>
                             </TouchableOpacity>
                         </View>
@@ -46,7 +48,7 @@ export default function Home(){
 
 const styles = StyleSheet.create({
     home:{
-        backgroundColor: '#424F76',
+        backgroundColor: paletteColor.backGroundColor,
         flex:1,
         alignItems: 'center',
     },
@@ -56,18 +58,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize:58,
         marginHorizontal:17,
-        fontFamily:'sans-serif-medium',
-        color:'#D2D9F2'
+        fontFamily:paletteColor.FontFamily,
+        color:paletteColor.fontColor
     },
     homeSubTitle:{
         textAlign: 'center',
-        fontFamily:'sans-serif-medium',
+        fontFamily:paletteColor.FontFamily,
         marginBottom:40,
         fontSize:14,
         borderBottomWidth:2,
         paddingBottom:5,
-        borderBottomColor:'#516090',
-        color:'#D2D9F2'
+        borderBottomColor:paletteColor.secondColor,
+        color:paletteColor.fontColor
     },
     materiaButton:{
 
@@ -77,29 +79,29 @@ const styles = StyleSheet.create({
         //borderWidth:1,
         elevation: 2,
         textAlign:'center',
-        backgroundColor:'#424F76',
-        color:'#D2D9F2',
+        backgroundColor:paletteColor.backGroundColor,
+        color:paletteColor.fontColor,
         borderRadius:5
 
     },
     container: {
         //backgroundColor: '#5EC2B7',
         flex:1,
-        backgroundColor: '#424F76',
+        backgroundColor: paletteColor.backGroundColor,
         alignItems: 'center',
     },
     area:{
         alignItems:'center',
         //backgroundColor:'#2CA6A4',
-        backgroundColor: '#516090',
+        backgroundColor: paletteColor.secondColor,
         padding:10,
         marginVertical:10,
         elevation: 2,
-        borderRadius:5,
+        borderRadius:10,
         minWidth:'85%'
     },
     areaButton:{
-        backgroundColor:'#424F76',
+        backgroundColor:paletteColor.backGroundColor,
         paddingVertical:13,
         paddingHorizontal:15,
         margin:5,
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     },
     appButtonText:{
         fontSize:21,
-        color:'#D2D9F2'
+        color:paletteColor.fontColor
     }
   });
   

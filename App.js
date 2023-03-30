@@ -4,6 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import Home from './components/home/home';
 import Welcome from './components/welcome/welcome';
+import MakeQuestion from './components/home/question'
+
+
 
 const Stack = createStackNavigator();
 
@@ -15,7 +18,8 @@ export default function App() {
 
           <Stack.Screen name="Welcome" component = {Welcome} options={{headerShown:false}}/>
           <Stack.Screen name="Home" component = {Home} options={{headerShown:false}}/>
-          
+          <Stack.Screen name="makeQuestion" component = {MakeQuestion} options={{headerShown:false}}/>
+
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
