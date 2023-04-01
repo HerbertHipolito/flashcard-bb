@@ -1,14 +1,11 @@
 import {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor'
+import materias from '../../data/materias'
 
 export default function Home({navigation}){
 
-    const [areas,setAreas] = useState({
-        'Conhecimentos Básicos':["Portugues","ingles","Matemática","Atualidades do Mercado Financeiro"],
-        'Conhecimentos Específicos':["prob. e estatística","Conh. Bancários","Tecnologia da informação"]
-    })
-
+    const [areas,setAreas] = useState(materias)
     const [showSection,setShowSection] = useState([false,false])
 
     const buttonSections = (index) =>{
@@ -53,7 +50,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     homeTitle:{
-        marginTop:80,
+        marginTop:"11%",
         marginBottom:10,
         textAlign: 'center',
         fontSize:58,
@@ -64,7 +61,7 @@ const styles = StyleSheet.create({
     homeSubTitle:{
         textAlign: 'center',
         fontFamily:paletteColor.FontFamily,
-        marginBottom:40,
+        marginBottom:30,
         fontSize:14,
         borderBottomWidth:2,
         paddingBottom:5,
@@ -73,15 +70,16 @@ const styles = StyleSheet.create({
     },
     materiaButton:{
 
-        fontSize:15,
-        padding:5,
+        fontSize:17,
+        padding:8,
         marginVertical:5,
         //borderWidth:1,
         elevation: 2,
         textAlign:'center',
         backgroundColor:paletteColor.backGroundColor,
         color:paletteColor.fontColor,
-        borderRadius:5
+        borderRadius:5,
+        minWidth:'35%'
 
     },
     container: {
