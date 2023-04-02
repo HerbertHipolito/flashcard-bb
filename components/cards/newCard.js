@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import paletteColor from '../PaletteColor/paletteColor'; 
 import materias from '../../data/materias'
 import transformarKeys from '../../data/transformarKeys'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import {handleSubmit, RegexValidation, checkSameQuestion, materiaTransformada} from './newCardFunctions'
 
 export default function NewCards({route,navigation}){
 
@@ -14,7 +15,6 @@ export default function NewCards({route,navigation}){
     const [currentCards, setCurrentCards] = useState(null)
     const [validationInput,setValidationInput] = useState(undefined)
 
-    // test that shit
 
     useEffect(()=>{
 
@@ -39,16 +39,21 @@ export default function NewCards({route,navigation}){
                 return jsonValue    
 
             } catch(e) {
-              // error reading value
-              console.log(e)
-              Alert.alert('Something went wrong')
-            }
+
+              console.log(e.message)
+              Alert.alert(
+                'Something went wrong',
+                'You will be redirected to home page',
+                [
+                    { text:'Voltar',onPress:() => navigation.navigate('Home') }
+                ]
+            )}
         }
         
         getData().then(value => setCurrentCards(value))
 
     },[])
-
+/*
     const materiaTransformada = (transformarKeys) =>{
 
         let keyTransformada = null
@@ -79,6 +84,11 @@ export default function NewCards({route,navigation}){
 
     }
 
+    const RegexValidation = (input) => {
+        let regex = /[A-Za-z0-9]/;
+        return regex.test(input);
+    }
+
     const handleSubmit = (questionInput, answerInput) =>{
 
         var passed = true
@@ -86,21 +96,24 @@ export default function NewCards({route,navigation}){
         if(!questionInput || !answerInput) passed = false
         else if(questionInput.length > 180 || answerInput.length > 250) passed = false
         else if(checkSameQuestion(questionInput)) passed = false //check for duplicate question
+        else if(!RegexValidation(questionInput) || !RegexValidation(answerInput)) passed = false
 
         if(!passed) setValidationInput(passed)
 
         return passed
 
     }
-
+*/
     const addCard = async () => {
 
-        if (!handleSubmit(questionCard, answerCard)) return;
+        if (!handleSubmit(questionCard, answerCard,setValidationInput,currentCards,route.params.materia)) return;
 
         const newCards = {...currentCards}
         let keyTransformada2 = null
 
-        keyTransformada2 = materiaTransformada(transformarKeys)
+        keyTransformada2 = materiaTransformada(transformarKeys,route.params.materia)
+
+        console.log(keyTransformada2,newCards)
 
         newCards[keyTransformada2].push({[questionCard]:answerCard}) 
         setCurrentCards(newCards)
@@ -129,6 +142,8 @@ export default function NewCards({route,navigation}){
             <Text style = {styles.NewCardTitle}> Novo card  </Text>
         </View>
 
+        {console.log(currentCards)}
+
         <Text style = {styles.novoCardText}><Text style = {styles.materia}> Materia: {route.params.materia} </Text></Text>
         <View style = {styles.TextInputView}> 
             <TextInput
@@ -156,7 +171,7 @@ export default function NewCards({route,navigation}){
         validationInput?
         null:<View><Text style={styles.textError}>Input inválidos</Text></View>:null}
 
-        <TouchableOpacity onPress= {e => addCard()}>
+        <TouchableOpacity onPress= {e => addCard()}  testID="registerCardButton">
             <Text style={styles.registerButton} > Registrar </Text>
         </TouchableOpacity>
 
