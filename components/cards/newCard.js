@@ -5,8 +5,6 @@ import materias from '../../data/materias'
 import transformarKeys from '../../data/transformarKeys'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// make the app saves the data in the async-storage https://react-native-async-storage.github.io/async-storage/docs/usage
-
 export default function NewCards({route,navigation}){
 
     const [materiaName, setMateriaName] = useState("")
@@ -14,6 +12,9 @@ export default function NewCards({route,navigation}){
     const [answerCard, setAnswerCard] = useState("")
     const [deck, setDeck] = useState([])
     const [currentCards, setCurrentCards] = useState(null)
+    const [validationInput,setValidationInput] = useState(undefined)
+
+    // test that shit
 
     useEffect(()=>{
 
@@ -21,7 +22,6 @@ export default function NewCards({route,navigation}){
 
             try {
                 let jsonValue = await AsyncStorage.getItem('@my_cards')
-                console.log(jsonValue)
                 if(jsonValue) {
                     jsonValue = JSON.parse(jsonValue)
                 }else{
@@ -41,6 +41,7 @@ export default function NewCards({route,navigation}){
             } catch(e) {
               // error reading value
               console.log(e)
+              Alert.alert('Something went wrong')
             }
         }
         
@@ -48,8 +49,8 @@ export default function NewCards({route,navigation}){
 
     },[])
 
-    const addCard = async () => { 
-        const newCards = {...currentCards}
+    const materiaTransformada = (transformarKeys) =>{
+
         let keyTransformada = null
 
         for(key in transformarKeys) {
@@ -59,37 +60,77 @@ export default function NewCards({route,navigation}){
             }
         }
 
-        newCards[keyTransformada].push({[questionCard]:answerCard}) 
+        return keyTransformada
+
+    }
+
+    const checkSameQuestion = (question) =>{
+
+        let cardExist = false
+
+        for (card of currentCards[materiaTransformada(transformarKeys)]){
+            if(Object.keys(card)[0] === question){
+                cardExist = true
+                break
+            }
+        }
+
+        return cardExist
+
+    }
+
+    const handleSubmit = (questionInput, answerInput) =>{
+
+        var passed = true
+
+        if(!questionInput || !answerInput) passed = false
+        else if(questionInput.length > 180 || answerInput.length > 250) passed = false
+        else if(checkSameQuestion(questionInput)) passed = false //check for duplicate question
+
+        if(!passed) setValidationInput(passed)
+
+        return passed
+
+    }
+
+    const addCard = async () => {
+
+        if (!handleSubmit(questionCard, answerCard)) return;
+
+        const newCards = {...currentCards}
+        let keyTransformada2 = null
+
+        keyTransformada2 = materiaTransformada(transformarKeys)
+
+        newCards[keyTransformada2].push({[questionCard]:answerCard}) 
         setCurrentCards(newCards)
 
-        const result = await AsyncStorage.setItem('@my_cards', JSON.stringify(newCards)) //the return is undefined. https://reactnative.dev/docs/asyncstorage
-        console.log(result)
-        if(result){
+        try{
+            
+            await AsyncStorage.setItem('@my_cards', JSON.stringify(newCards))
             Alert.alert(
+                'confirmação',
                 `Card registrado com sucesso`,
                 [
-                    {
-                        text:'Voltar',
-                        onPress:() => {navigation.navigate('Home')}
-                    },
-                    {
-                        text:'Novo card'
-                    }
+                    { text:'Voltar',onPress:() => navigation.navigate('Home') },
+                    { text:'Novo card' }
                 ]
             )
-        }else{
-            console.log('something went wrong')
+           
+        }catch(e){
+            Alert.alert('Something went wrong')
+            console.log(e)
         }
 
     }
 
     return <View style = {styles.newCardView}>
-
         <View>
-            <Text style = {styles.NewCardTitle}>Novo Card</Text>
+            <Text style = {styles.NewCardTitle}> Novo card  </Text>
         </View>
 
-        <View style = {styles.TextInputView}>
+        <Text style = {styles.novoCardText}><Text style = {styles.materia}> Materia: {route.params.materia} </Text></Text>
+        <View style = {styles.TextInputView}> 
             <TextInput
             style = {styles.TextInputNewCard}
             placeholder = "Escreva a pergunta"
@@ -111,7 +152,11 @@ export default function NewCards({route,navigation}){
             />
         </View>
 
-        <TouchableOpacity onPress= {e => {addCard()}}>
+        {validationInput !== undefined?
+        validationInput?
+        null:<View><Text style={styles.textError}>Input inválidos</Text></View>:null}
+
+        <TouchableOpacity onPress= {e => addCard()}>
             <Text style={styles.registerButton} > Registrar </Text>
         </TouchableOpacity>
 
@@ -123,7 +168,7 @@ const styles = StyleSheet.create({
     NewCardTitle:{
         fontFamily:paletteColor.FontFamily,
         fontSize:50,
-        marginVertical:"25%",
+        marginTop:"20%",
         color:paletteColor.fontColor
     },
     newCardView:{
@@ -131,6 +176,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
         flex:1,
         backgroundColor:paletteColor.backGroundColor,
+    },
+    novoCardText:{
+        marginBottom:"15%",
+        marginTop:"3%",
+        fontSize:14
     },
     TextInputNewCard:{
         backgroundColor:paletteColor.secondColor,
@@ -151,6 +201,13 @@ const styles = StyleSheet.create({
         color:paletteColor.fontColor,
         fontSize:25,
         marginTop:'13%',
+    },
+    materia:{
+        fontSize:16,
+        color:paletteColor.fontColor
+    },
+    textError:{
+        marginVertical:'5%',
     }
 })
 
