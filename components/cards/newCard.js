@@ -127,7 +127,7 @@ export default function NewCards({route,navigation}){
 
         {errorMessage?<View><Text style={styles.textError}>Input inválidos: {errorMessage}</Text></View>:null}
 
-        <TouchableOpacity onPress= {e => addCard()}  testID="registerCardButton">
+        <TouchableOpacity onPress= {e => addCard()} >
             <Text style={styles.registerButton} > Registrar </Text>
         </TouchableOpacity>
 
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
         color:paletteColor.fontColor,
         fontSize:25,
         marginTop:'13%',
+        
     },
     materia:{
         fontSize:16,
