@@ -17,7 +17,7 @@ export const materiaTransformada = (transformarKeys,subject) =>{
 export const checkSameQuestion = (question, currentCards, subject) =>{
 
     let cardExist = false
-    console.log(currentCards[materiaTransformada(transformarKeys,subject)])
+    console.log(currentCards,materiaTransformada(transformarKeys,subject),transformarKeys,subject)
     for (card of currentCards[materiaTransformada(transformarKeys,subject)]){
         if(Object.keys(card)[0] === question){
             cardExist = true
@@ -33,17 +33,28 @@ export const RegexValidation = (input) => {
     return regex.test(input);
 }
 
-export const handleSubmit = (questionInput, answerInput, setValidationInput, currentCards, subject) =>{
+export const handleSubmit = (questionInput, answerInput, currentCards, subject) =>{
 
     var passed = true
+    var errorMessage = ''
 
-    if(!questionInput || !answerInput) passed = false
-    else if(questionInput.length > 180 || answerInput.length > 250) passed = false
-    else if(checkSameQuestion(questionInput,currentCards,subject)) passed = false //check for duplicate question
-    else if(!RegexValidation(questionInput) || !RegexValidation(answerInput)) passed = false
+    if(!questionInput || !answerInput) {
+        passed = false 
+        errorMessage = 'Algum ou ambos input estão vazios'
+    }
+    else if(questionInput.length > 180 || answerInput.length > 250) {
+        passed = false
+        errorMessage = 'input é muito longo'
+    }
+    else if(checkSameQuestion(questionInput,currentCards,subject)) {
+        passed = false //check for duplicate question
+        errorMessage = "Essa pergunta já existe"
+    }
+    else if(!RegexValidation(questionInput) || !RegexValidation(answerInput)) {
+        passed = false
+        errorMessage = "Alguns dos inputs contêm caracteres inválidos"
+    }
 
-    if(!passed) setValidationInput(passed)
-
-    return passed
+    return [passed,errorMessage]
 
 }

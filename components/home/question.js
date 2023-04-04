@@ -17,7 +17,7 @@ export default function MakeQuestion({route,navigation}){
             <TouchableOpacity onPress={e => navigation.navigate('newCard',{materia:route.params.materia})}>
                 <Text style = {styles.questionButtons}> Criar cards </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={e => navigation.navigate('makeQuestion',{materia:route.params.materia})}>
+            <TouchableOpacity onPress={e => navigation.navigate('ReviewCard',{materia:route.params.materia})}>
                 <Text style = {styles.questionButtons}> Revisar Cards </Text>
             </TouchableOpacity>
         </View>

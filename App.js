@@ -6,6 +6,7 @@ import Home from './components/home/home';
 import Welcome from './components/welcome/welcome';
 import MakeQuestion from './components/home/question';
 import NewCard from './components/cards/newCard'
+import ReviewCard from './components/reviewCard/reviewCard';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name="Home" component = {Home} options={{headerShown:false}}/>
           <Stack.Screen name="makeQuestion" component = {MakeQuestion} options={{headerShown:false}}/>
           <Stack.Screen name="newCard" component = {NewCard} options={{headerShown:false}}/>
+          <Stack.Screen name="ReviewCard" component = {ReviewCard} options={{headerShown:false}}/>
 
         </Stack.Group>
       </Stack.Navigator>

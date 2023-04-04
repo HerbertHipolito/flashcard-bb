@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import paletteColor from '../PaletteColor/paletteColor'
 
@@ -7,7 +7,7 @@ import paletteColor from '../PaletteColor/paletteColor'
 
 export default function Welcome({navigation}){
 
-    return <View style = {styles.welcomeContainer}>
+    return <SafeAreaView style = {styles.welcomeContainer}>
 
         <Text style = {styles.title} >Bem-vindo!</Text>
         
@@ -21,7 +21,7 @@ export default function Welcome({navigation}){
                 <Text style={styles.buttons} onPress={e=>navigation.navigate('Home')}>Continue</Text>
             </TouchableOpacity>
         </View>
-    </View>
+    </SafeAreaView>
 
 }
 

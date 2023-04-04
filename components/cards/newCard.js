@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, SafeAreaView } from 'react-native';
 import { useState, useEffect } from 'react';
 import paletteColor from '../PaletteColor/paletteColor'; 
 import materias from '../../data/materias'
@@ -13,7 +13,7 @@ export default function NewCards({route,navigation}){
     const [answerCard, setAnswerCard] = useState("")
     const [deck, setDeck] = useState([])
     const [currentCards, setCurrentCards] = useState(null)
-    const [validationInput,setValidationInput] = useState(undefined)
+    const [errorMessage, setErrorMessage] = useState(null)
 
 
     useEffect(()=>{
@@ -53,60 +53,15 @@ export default function NewCards({route,navigation}){
         getData().then(value => setCurrentCards(value))
 
     },[])
-/*
-    const materiaTransformada = (transformarKeys) =>{
 
-        let keyTransformada = null
-
-        for(key in transformarKeys) {
-            if(transformarKeys[key] === route.params.materia){
-                keyTransformada = key
-                break
-            }
-        }
-
-        return keyTransformada
-
-    }
-
-    const checkSameQuestion = (question) =>{
-
-        let cardExist = false
-
-        for (card of currentCards[materiaTransformada(transformarKeys)]){
-            if(Object.keys(card)[0] === question){
-                cardExist = true
-                break
-            }
-        }
-
-        return cardExist
-
-    }
-
-    const RegexValidation = (input) => {
-        let regex = /[A-Za-z0-9]/;
-        return regex.test(input);
-    }
-
-    const handleSubmit = (questionInput, answerInput) =>{
-
-        var passed = true
-
-        if(!questionInput || !answerInput) passed = false
-        else if(questionInput.length > 180 || answerInput.length > 250) passed = false
-        else if(checkSameQuestion(questionInput)) passed = false //check for duplicate question
-        else if(!RegexValidation(questionInput) || !RegexValidation(answerInput)) passed = false
-
-        if(!passed) setValidationInput(passed)
-
-        return passed
-
-    }
-*/
     const addCard = async () => {
 
-        if (!handleSubmit(questionCard, answerCard,setValidationInput,currentCards,route.params.materia)) return;
+        const validationInputAndErrorMessage = handleSubmit(questionCard, answerCard,currentCards,route.params.materia)
+
+        if(!validationInputAndErrorMessage[0]) {
+            setErrorMessage(validationInputAndErrorMessage[1])
+            return;
+        }
 
         const newCards = {...currentCards}
         let keyTransformada2 = null
@@ -117,6 +72,9 @@ export default function NewCards({route,navigation}){
 
         newCards[keyTransformada2].push({[questionCard]:answerCard}) 
         setCurrentCards(newCards)
+        setErrorMessage(null)
+        setQuestionCard('')
+        setAnswerCard('')
 
         try{
             
@@ -137,7 +95,7 @@ export default function NewCards({route,navigation}){
 
     }
 
-    return <View style = {styles.newCardView}>
+    return <SafeAreaView style = {styles.newCardView}>
         <View>
             <Text style = {styles.NewCardTitle}> Novo card  </Text>
         </View>
@@ -167,15 +125,13 @@ export default function NewCards({route,navigation}){
             />
         </View>
 
-        {validationInput !== undefined?
-        validationInput?
-        null:<View><Text style={styles.textError}>Input inválidos</Text></View>:null}
+        {errorMessage?<View><Text style={styles.textError}>Input inválidos: {errorMessage}</Text></View>:null}
 
         <TouchableOpacity onPress= {e => addCard()}  testID="registerCardButton">
             <Text style={styles.registerButton} > Registrar </Text>
         </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
 
 }
 
@@ -222,7 +178,7 @@ const styles = StyleSheet.create({
         color:paletteColor.fontColor
     },
     textError:{
-        marginVertical:'5%',
+        marginVertical:'1%',
     }
 })
 

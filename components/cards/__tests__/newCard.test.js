@@ -5,7 +5,7 @@ import transformarKeys from '../../../data/transformarKeys'
 
 describe('RegexValidation', () => {
     
-  it('Test RegexValidation',()=>{
+  it('should test the Regex function',()=>{
     
     expect(RegexValidation('')).toBe(false)
     expect(RegexValidation('dasdia339820fe')).toBe(true)
@@ -29,13 +29,13 @@ describe('Submit validation', () => {
     Tecnologia_da_informação:[]
   }
 
-  it('Test submit validation',() => {
+  it(' should test the handleSubmit function',() => { //Validate the input size.
 
-    expect(handleSubmit('daweaw','daqweqfdasdasfd',()=>null,currentCards,'ingles')).toBe(true)
-    expect(handleSubmit('','31231',()=>null,currentCards,'ingles')).toBe(false)
-    expect(handleSubmit('31231','',()=>null,currentCards,'ingles')).toBe(false)
-    expect(handleSubmit('','',()=>null,currentCards,'ingles')).toBe(false)
-    expect(handleSubmit('你好世界','daqweqfdasdasfd',()=>null,currentCards,'ingles')).toBe(false)
+    expect(handleSubmit('daweaw','daqweqfdasdasfd',currentCards,'ingles')).toStrictEqual([true,''])
+    expect(handleSubmit('','31231',currentCards,'ingles')).toStrictEqual([false,'Algum ou ambos input estão vazios'])
+    expect(handleSubmit('31231','',currentCards,'ingles')).toStrictEqual([false,'Algum ou ambos input estão vazios'])
+    expect(handleSubmit('','',currentCards,'ingles')).toStrictEqual([false,'Algum ou ambos input estão vazios'])
+    expect(handleSubmit('你好世界','daqweqfdasdasfd',currentCards,'ingles')).toStrictEqual([false,'Alguns dos inputs contêm caracteres inválidos'])
 
   })
 
@@ -43,7 +43,7 @@ describe('Submit validation', () => {
 
 describe('materiaTransformada validation', () => {
 
-  it('test materiaTransformada',()=>{
+  it(' should test whether the transformarKeys is maping the correct subjects ',()=>{
 
     Object.keys(transformarKeys).map(key =>{
       expect(materiaTransformada(transformarKeys,transformarKeys[key])).toBe(key)
