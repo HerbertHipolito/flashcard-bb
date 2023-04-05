@@ -1,11 +1,10 @@
 import {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-import transformarKeys from '../../data/transformarKeys';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//mport transformarKeys from '../../data/transformarKeys';
 import paletteColor from '../PaletteColor/paletteColor';
-import {materiaTransformada} from '../cards/newCardFunctions';
+//import {materiaTransformada} from '../cards/newCardFunctions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageFunction'
 
 export default function ReviewCard({route,navigation}){
 
@@ -15,96 +14,16 @@ export default function ReviewCard({route,navigation}){
     const [learnedCard,setLearnedCard] = useState({});
 
     useEffect(()=>{
-
-        const getData = async () => {
-
-            try {
-                let jsonValue = await AsyncStorage.getItem('@my_cards')
-                if(jsonValue) {
-                    jsonValue = JSON.parse(jsonValue)
-                }else{
-                    jsonValue = JSON.stringify({
-                        Portugues:[],
-                        ingles:[], 
-                        Matemática:[],
-                        Atualidades_do_Mercado_Financeiro:[],
-                        prob_e_estatística:[],
-                        Conh_Bancários:[],
-                        Tecnologia_da_informação:[]
-                    })
-                    await AsyncStorage.setItem('@my_cards', jsonValue)
-                }
-                return jsonValue    
-
-            } catch(e) {
-              console.log(e.message)
-              Alert.alert(
-                'Something went wrong',
-                'You will be redirected to home page',
-                [
-                    { text:'Voltar',onPress:() => navigation.navigate('Home') }
-                ]
-            )}
-        }
         
-        getData().then(value => {
-            
-            if(value[materiaTransformada(transformarKeys,route.params.materia)].length === 0){
-                Alert.alert(
-                    `There is no card registered in ${route.params.materia}`,
-                    'You will be redirected to home page',
-                    [
-                        { text:'Voltar',onPress:() => navigation.navigate('Home') }
-                    ]
-                )
-            }else{
-                const myCards = value[materiaTransformada(transformarKeys,route.params.materia)]
-                setCards(myCards)
-                console.log(getAnElementFromArrayRandomly(myCards))
-                setSelectedCard(getAnElementFromArrayRandomly(myCards))
-            }
-        
-        })
+        const StorageCards = new myStorageClass('@my_cards',navigation)
+        console.log(route.params.materia)
+        StorageCards.loadingCards(route.params.materia,setCards,setSelectedCard)
 
     },[])
 
-    const getAnElementFromArrayRandomly = (array) => array[Math.round(Math.random() * (array.length-1) )]
-
-    const LearnedCardCheck = async (card) => {
-
-        try {
-            let jsonValue = await AsyncStorage.getItem('@cards_learned')
-            if(jsonValue) {
-                jsonValue = JSON.parse(jsonValue)
-            }else{
-                jsonValue = JSON.stringify({
-                    Portugues:[],
-                    ingles:[], 
-                    Matemática:[],
-                    Atualidades_do_Mercado_Financeiro:[],
-                    prob_e_estatística:[],
-                    Conh_Bancários:[],
-                    Tecnologia_da_informação:[]
-                })
-                await AsyncStorage.setItem('@cards_learned', jsonValue)
-            }
-            return jsonValue    
-
-        } catch(e) {
-          console.log(e.message)
-          Alert.alert(
-            'Something went wrong',
-            'You will be redirected to home page',
-            [
-                { text:'Voltar',onPress:() => navigation.navigate('Home') }
-            ]
-        )}
-
-    }
-
     const LearnedCardHandler = () => {
 
-        LearnedCardCheck().then(data =>{ //remove a card from @my_cards and add it to @cards_learned
+        myStorage('@cards_learned').then(data =>{ //remove a card from @my_cards and add it to @cards_learned
 
         })
 
