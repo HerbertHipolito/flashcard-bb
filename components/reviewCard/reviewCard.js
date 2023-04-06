@@ -5,27 +5,56 @@ import paletteColor from '../PaletteColor/paletteColor';
 //import {materiaTransformada} from '../cards/newCardFunctions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageFunction'
+/*
+tests I need to do:
+
+What will happen if I remove all cards from the card array?
+
+*/
+
 
 export default function ReviewCard({route,navigation}){
 
     const [cards,setCards] = useState(null);
     const [seeOutcome,setSeeOutcome] = useState(false);
-    const [selectedCard,setSelectedCard] = useState(null);
-    const [learnedCard,setLearnedCard] = useState({});
+    const [sortedCard,setSortedCard] = useState(null);
+    //const [learnedCard,setLearnedCard] = useState({});
+    const [unlearnedCard, setUnlearnedCard] = useState(null);
+    const [learnedCard, setLearnedCard] = useState(null);
 
     useEffect(()=>{
         
-        const StorageCards = new myStorageClass('@my_cards',navigation)
-        console.log(route.params.materia)
-        StorageCards.loadingCards(route.params.materia,setCards,setSelectedCard)
+        const StorageCardsUnlearned = new myStorageClass('@my_cards',navigation,route.params.materia,setCards,setSortedCard)
+        const StorageCardsLearned = new myStorageClass('@cards_learned',navigation,route.params.materia,setCards,setSortedCard)
+
+        StorageCardsUnlearned.loadingCards()
+        setUnlearnedCard(StorageCardsUnlearned)
+
+        StorageCardsLearned.loadingCards(false,false)
+        setLearnedCard(StorageCardsLearned)
 
     },[])
 
-    const LearnedCardHandler = () => {
+    const LearnedCardHandler = async () => {
 
-        myStorage('@cards_learned').then(data =>{ //remove a card from @my_cards and add it to @cards_learned
+        const cardToBeRemoved = sortedCard
+        
+        try{
+            let resultRemo = await unlearnedCard.removeCard(cardToBeRemoved)
 
-        })
+            if(!resultRemo) throw new Error("Error in removal")
+
+            let resultAdd = await learnedCard.addingALearnedCard(sortedCard)
+            
+            if(!resultAdd) throw new Error("Error in add")
+
+            const cardLearnedafterChanging = await learnedCard.gettingDataAllSubject()
+
+            console.log(cardLearnedafterChanging)
+
+        }catch(e){
+            console.log('something went wrong',e.message)
+        }        
 
     }
 
@@ -36,11 +65,11 @@ export default function ReviewCard({route,navigation}){
         <View style = {styles.CardView}>
 
             <View style ={styles.questionView}>
-                <Text style = {styles.questionTitle}>{selectedCard?Object.keys(selectedCard):null}</Text>
+                <Text style = {styles.questionTitle}>{sortedCard?Object.keys(sortedCard):null}</Text>
             </View>
             <View style = {styles.ButtonView}>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress = {e=>LearnedCardHandler()}>
                     <Icon  style={styles.rightButton} name="verified" size={60} color="#424F76" />
                 </TouchableOpacity>
 
@@ -49,7 +78,7 @@ export default function ReviewCard({route,navigation}){
                 </TouchableOpacity>
                 
                 <TouchableOpacity onPress = {e => {
-                    setSelectedCard(getAnElementFromArrayRandomly(cards))
+                    setSortedCard(getAnElementFromArrayRandomly(cards))
                     if(seeOutcome) setSeeOutcome(!seeOutcome)
                     }}>
                     <Icon style = {styles.dontKnowButton} name="dangerous" size={60} color="#424F76" />
@@ -58,7 +87,7 @@ export default function ReviewCard({route,navigation}){
             </View>
             {seeOutcome?
             <View style= {styles.answerView}>
-                <Text style = {styles.answerText}>{selectedCard[Object.keys(selectedCard)]}</Text>
+                <Text style = {styles.answerText}>{sortedCard[Object.keys(sortedCard)]}</Text>
             </View>:null}   
 
         </View>
@@ -91,7 +120,11 @@ const styles = StyleSheet.create({
         backgroundColor:paletteColor.secondColor,
         alignSelf:'center',
         padding:'5%',
-        elevation:3
+        elevation:3,
+        marginHorizontal:'2%'
+    },
+    questionTitle:{
+        fontSize:20,
     },
     outcomeButton:{
         padding:'5%',
