@@ -5,25 +5,23 @@ import transformarKeys from './data/transformarKeys';
 
 export class myStorageClass{
 
-    constructor(key,navigation,subject,setCards,setSortedCard){
+    constructor(key,navigation,subject){
 
         this.key = key // the key of the storage data.
         this.navigation = navigation
         this.JsonSubject = null
         this.subject = subject
-        this.setCards = setCards
-        this.setSortedCard = setSortedCard
 
     }
 
-    async gettingDataAllSubject(){ //test this method.
+    async gettingDataAllSubject(){
 
         try{
             let jsonPromise = await AsyncStorage.getItem(this.key)
             return JSON.parse(jsonPromise)
 
         }catch(error){
-            console.log(error)
+            this.errorAlert()
         }
 
     }
@@ -80,8 +78,6 @@ export class myStorageClass{
 
     
     async removeCard(cardToRemove){
-
-        let successfulRemoval = false
         
         try{
 
@@ -95,102 +91,66 @@ export class myStorageClass{
 
             await AsyncStorage.setItem(this.key,JSON.stringify(subjects))
 
-            this.setCards(newArray)
-            this.setSortedCard(getAnElementFromArrayRandomly(newArray))
-            successfulRemoval = true
+            //this.setCards(newArray)
+            //this.setSortedCard(getAnElementFromArrayRandomly(newArray))
+            
+            return newArray
 
         }catch(e){
             
-            this.errorAlert(line1='Something went wrong during the deletion of the card',BackHomePageIfArrayCardIsEmpty=false)
+            this.errorAlert(line1='Something went wrong during the card removal',BackHomePageIfArrayCardIsEmpty=false)
         }
-
-
-        return successfulRemoval
+        return false
 
     }
 
-/*
-    async removeCard(cardToRemove){
-
-        let sucessullyRemove = false
-        
-        this.gettingDataAllSubject().then(async subjects => {
-
-            try{
-
-                const newArray = subjects[materiaTransformada(transformarKeys,this.subject)].filter(card => {
-                    return Object.keys(card)[0] !== Object.keys(cardToRemove)[0]?card:null
-                });
-
-                subjects[materiaTransformada(transformarKeys,this.subject)] = newArray
-
-                await AsyncStorage.setItem(this.key,JSON.stringify(subjects))
-
-                this.setCards(newArray)
-                this.setSortedCard(getAnElementFromArrayRandomly(newArray))
-                sucessullyRemove = true
-
-            }catch(e){
-                
-                this.errorAlert(line1='Something went wrong during the deletion of the card',BackHomePageIfArrayCardIsEmpty=false)
-            }
-
-        })
-
-        return sucessullyRemove
-
-    }
-*/
     async addingALearnedCard(card){
-
-        const CardAlreadyExists = this.findACard(card)
-        console.log('CardExists',CardAlreadyExists)
-        let successfulAdd = false
-
-        if(CardAlreadyExists) return null
 
         try{
             
             let data = await this.gettingDataAllSubject()
 
+            const CardAlreadyExists = this.findACard(data[materiaTransformada(transformarKeys,this.subject)])
+            if(CardAlreadyExists) return null
+
             data[materiaTransformada(transformarKeys,this.subject)].push(card)
 
             await AsyncStorage.setItem(this.key, JSON.stringify(data))
 
-            successfulAdd = true
-            
+            return data 
+
         }catch(e){
             
-            this.errorAlert(line1='Something went wrong during the insertion of the card',false)
+            this.errorAlert(line1='Something went wrong during the card insertion',false)
 
         }
 
-        return successfulAdd
+        return false
 
     }
 
-    async loadingCards(BackHomePageIfArrayCardIsEmpty=true,updateCards=true){
+    async loadingCards(BackHomePageIfArrayCardIsEmpty=true,updateCards=true,setCards=()=>null){
 
+        data  = await this.initializingCreateStorage()
+        
+        if( BackHomePageIfArrayCardIsEmpty  &&  data[materiaTransformada(transformarKeys,this.subject)].length === 0 ){
 
-        this.initializingCreateStorage().then(data =>{ 
+            const secondLineTextError = BackHomePageIfArrayCardIsEmpty?'You will be redirected to home page':''
+            this.errorAlert(`There is no card registered in ${this.subject}`,secondLineTextError,BackHomePageIfArrayCardIsEmpty)
+            
+        }else{
 
-            if( BackHomePageIfArrayCardIsEmpty  &&  data[materiaTransformada(transformarKeys,this.subject)].length === 0 ){
-
-                const secondLineTextError = BackHomePageIfArrayCardIsEmpty?'You will be redirected to home page':''
-                this.errorAlert(`There is no card registered in ${this.subject}`,secondLineTextError,BackHomePageIfArrayCardIsEmpty)
-                
-            }else{
-
-                const myCards = data[materiaTransformada(transformarKeys,this.subject)]
-                
-                if(updateCards){
-                    this.setCards(myCards)
-                    this.setSortedCard(getAnElementFromArrayRandomly(myCards))
-                } 
-                
+            const myCards = data[materiaTransformada(transformarKeys,this.subject)]
+            
+            if(updateCards){
+                setCards(myCards)
+                //this.setSortedCard(getAnElementFromArrayRandomly(myCards))
             }
-
-        })
+            
+            this.JsonSubject = data
+            return myCards
+            
+        }
 
     }
 

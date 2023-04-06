@@ -5,6 +5,8 @@ import materias from '../../data/materias'
 import transformarKeys from '../../data/transformarKeys'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {handleSubmit, RegexValidation, checkSameQuestion, materiaTransformada} from './newCardFunctions'
+import {myStorageClass} from '../../myStorageClass'
+
 
 export default function NewCards({route,navigation}){
 
@@ -20,6 +22,7 @@ export default function NewCards({route,navigation}){
 
         const getData = async () => {
 
+            /*
             try {
                 let jsonValue = await AsyncStorage.getItem('@my_cards')
                 if(jsonValue) {
@@ -48,6 +51,9 @@ export default function NewCards({route,navigation}){
                     { text:'Voltar',onPress:() => navigation.navigate('Home') }
                 ]
             )}
+            */
+            const StorageCards = new myStorageClass('@my_cards',navigation,route.params.materia)
+            return await StorageCards.initializingCreateStorage()
         }
         
         getData().then(value => setCurrentCards(value))

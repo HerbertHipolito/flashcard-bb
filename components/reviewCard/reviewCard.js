@@ -1,10 +1,8 @@
 import {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-//mport transformarKeys from '../../data/transformarKeys';
 import paletteColor from '../PaletteColor/paletteColor';
-//import {materiaTransformada} from '../cards/newCardFunctions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageFunction'
+import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageClass'
 /*
 tests I need to do:
 
@@ -24,14 +22,19 @@ export default function ReviewCard({route,navigation}){
 
     useEffect(()=>{
         
-        const StorageCardsUnlearned = new myStorageClass('@my_cards',navigation,route.params.materia,setCards,setSortedCard)
-        const StorageCardsLearned = new myStorageClass('@cards_learned',navigation,route.params.materia,setCards,setSortedCard)
+            
+            const StorageCardsUnlearned = new myStorageClass('@my_cards',navigation,route.params.materia)
+            const StorageCardsLearned = new myStorageClass('@cards_learned',navigation,route.params.materia)
 
-        StorageCardsUnlearned.loadingCards()
-        setUnlearnedCard(StorageCardsUnlearned)
+            setUnlearnedCard(StorageCardsUnlearned)
+            setLearnedCard(StorageCardsLearned)
+            
+            StorageCardsUnlearned.loadingCards(true,true,setCards).then(cards =>{
+                console.log(cards)
+                setSortedCard(getAnElementFromArrayRandomly(cards))
 
-        StorageCardsLearned.loadingCards(false,false)
-        setLearnedCard(StorageCardsLearned)
+            })
+            StorageCardsLearned.loadingCards(false,false,setCards)
 
     },[])
 
@@ -40,16 +43,18 @@ export default function ReviewCard({route,navigation}){
         const cardToBeRemoved = sortedCard
         
         try{
-            let resultRemo = await unlearnedCard.removeCard(cardToBeRemoved)
+            let cardsReturnRemo = await unlearnedCard.removeCard(cardToBeRemoved)
 
-            if(!resultRemo) throw new Error("Error in removal")
-
-            let resultAdd = await learnedCard.addingALearnedCard(sortedCard)
+            if(!cardsReturnRemo) throw new Error("Card removal error")
             
-            if(!resultAdd) throw new Error("Error in add")
+            setCards(cardsReturnRemo)
+            setSortedCard(getAnElementFromArrayRandomly(cardsReturnRemo))
+
+            let cardsReturnRemoAdd = await learnedCard.addingALearnedCard(sortedCard)
+            
+            if(!cardsReturnRemoAdd) throw new Error("Card insertion error")
 
             const cardLearnedafterChanging = await learnedCard.gettingDataAllSubject()
-
             console.log(cardLearnedafterChanging)
 
         }catch(e){
