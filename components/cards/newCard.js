@@ -21,37 +21,6 @@ export default function NewCards({route,navigation}){
     useEffect(()=>{
 
         const getData = async () => {
-
-            /*
-            try {
-                let jsonValue = await AsyncStorage.getItem('@my_cards')
-                if(jsonValue) {
-                    jsonValue = JSON.parse(jsonValue)
-                }else{
-                    jsonValue = JSON.stringify({
-                        Portugues:[],
-                        ingles:[], 
-                        Matemática:[],
-                        Atualidades_do_Mercado_Financeiro:[],
-                        prob_e_estatística:[],
-                        Conh_Bancários:[],
-                        Tecnologia_da_informação:[]
-                    })
-                    await AsyncStorage.setItem('@my_cards', jsonValue)
-                }
-                return jsonValue    
-
-            } catch(e) {
-
-              console.log(e.message)
-              Alert.alert(
-                'Something went wrong',
-                'You will be redirected to home page',
-                [
-                    { text:'Voltar',onPress:() => navigation.navigate('Home') }
-                ]
-            )}
-            */
             const StorageCards = new myStorageClass('@my_cards',navigation,route.params.materia)
             return await StorageCards.initializingCreateStorage()
         }

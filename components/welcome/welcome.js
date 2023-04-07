@@ -3,8 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, SafeAreaView
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import paletteColor from '../PaletteColor/paletteColor'
 
-//https://www.pexels.com/pt-br/procurar/educa%C3%A7%C3%A3o/
-
 export default function Welcome({navigation}){
 
     return <SafeAreaView style = {styles.welcomeContainer}>

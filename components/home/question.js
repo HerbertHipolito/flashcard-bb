@@ -13,13 +13,21 @@ export default function MakeQuestion({route,navigation}){
 
         <Icon name="payment" size={160} color="#424F76" />
 
-        <View style = {styles.buttonsView}> 
-            <TouchableOpacity onPress={e => navigation.navigate('newCard',{materia:route.params.materia})}>
-                <Text style = {styles.questionButtons}> Criar cards </Text>
+        <View>
+
+            <View style = {styles.buttonsView}> 
+                <TouchableOpacity onPress={e => navigation.navigate('newCard',{materia:route.params.materia})}>
+                    <Text style = {styles.questionButtons}> Criar cards </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={e => navigation.navigate('ReviewCard',{materia:route.params.materia})}>
+                    <Text style = {styles.questionButtons}> Revisar Cards </Text>
+                </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity onPress = {e => navigation.navigate('showLearnedCards',{materia:route.params.materia})}>
+                <Text style = {styles.seeLearnedButton}> Ver cards aprendidos </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={e => navigation.navigate('ReviewCard',{materia:route.params.materia})}>
-                <Text style = {styles.questionButtons}> Revisar Cards </Text>
-            </TouchableOpacity>
+
         </View>
 
     </View>
@@ -33,7 +41,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         flex:1,
         backgroundColor:paletteColor.backGroundColor,
-        paddingVertical:60
+        paddingVertical:'10%',
+        paddingBottom:'15%'
     },
     titleQuestion:{
         fontSize:50,
@@ -51,6 +60,15 @@ const styles = StyleSheet.create({
         paddingVertical:10,
         paddingHorizontal:6,
         marginHorizontal:15
+    },
+    seeLearnedButton:{
+        fontSize:20,
+        backgroundColor:paletteColor.secondColor,
+        paddingVertical:10,
+        paddingHorizontal:6,
+        marginVertical:30,
+        textAlign:'center',
+        marginHorizontal:'10%',
     }   
 
 })

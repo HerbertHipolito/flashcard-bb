@@ -26,7 +26,7 @@ export class myStorageClass{
 
     }
 
-    async CheckDataExist(){ //test this method.
+    async CheckDataExist(){ 
 
         let jsonValue = await AsyncStorage.getItem(this.key)
 
@@ -37,14 +37,12 @@ export class myStorageClass{
 
         try {
 
-            let jsonValue = await AsyncStorage.getItem(this.key) // continue from here
+            let jsonValue = await AsyncStorage.getItem(this.key) 
             this.JsonSubject = jsonValue
             let result = null
-            //console.log(jsonValue,this.key)
 
             if(jsonValue) {
                 jsonValue = JSON.parse(jsonValue)
-                
             }else{
                 jsonValue = JSON.stringify({
                     Portugues:[],
@@ -66,11 +64,16 @@ export class myStorageClass{
         }
     }
 
-    findACard(card){
+    findACard(cards,selectedCard){
 
-        const cardQuestion = Object.keys(card)
+        const cardQuestion = Object.keys(selectedCard)
     
-        result = this.JsonSubject[materiaTransformada(transformarKeys,this.subject)].filter( element => cardQuestion === Object.keys(element))
+        result = cards.filter( element => {
+            if(element){
+                if (cardQuestion === Object.keys(element)) 
+                    return  element
+                }
+        })
 
         return result.length !==0 ? true : false
 
@@ -84,21 +87,19 @@ export class myStorageClass{
             let subjects = await this.gettingDataAllSubject()
 
             const newArray = subjects[materiaTransformada(transformarKeys,this.subject)].filter(card => {
+                if(card===null) return null;
                 return Object.keys(card)[0] !== Object.keys(cardToRemove)[0]?card:null
             });
 
             subjects[materiaTransformada(transformarKeys,this.subject)] = newArray
 
             await AsyncStorage.setItem(this.key,JSON.stringify(subjects))
-
-            //this.setCards(newArray)
-            //this.setSortedCard(getAnElementFromArrayRandomly(newArray))
             
             return newArray
 
         }catch(e){
             
-            this.errorAlert(line1='Something went wrong during the card removal',BackHomePageIfArrayCardIsEmpty=false)
+            this.errorAlert(line1='Something went wrong during the card removal',line2=e.message,BackHomePageIfArrayCardIsEmpty=false)
         }
         return false
 
@@ -110,8 +111,8 @@ export class myStorageClass{
             
             let data = await this.gettingDataAllSubject()
 
-            const CardAlreadyExists = this.findACard(data[materiaTransformada(transformarKeys,this.subject)])
-            if(CardAlreadyExists) return null
+            const CardAlreadyExists = this.findACard(data[materiaTransformada(transformarKeys,this.subject)],card)
+            if(CardAlreadyExists) throw Error('Card already exists')
 
             data[materiaTransformada(transformarKeys,this.subject)].push(card)
 
@@ -121,7 +122,7 @@ export class myStorageClass{
 
         }catch(e){
             
-            this.errorAlert(line1='Something went wrong during the card insertion',false)
+            this.errorAlert(line1='Something went wrong during the card insertion',line2=e.message,false)
 
         }
 
@@ -137,6 +138,7 @@ export class myStorageClass{
 
             const secondLineTextError = BackHomePageIfArrayCardIsEmpty?'You will be redirected to home page':''
             this.errorAlert(`There is no card registered in ${this.subject}`,secondLineTextError,BackHomePageIfArrayCardIsEmpty)
+            return []
             
         }else{
 
@@ -144,7 +146,6 @@ export class myStorageClass{
             
             if(updateCards){
                 setCards(myCards)
-                //this.setSortedCard(getAnElementFromArrayRandomly(myCards))
             }
             
             this.JsonSubject = data

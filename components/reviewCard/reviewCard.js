@@ -3,13 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert, SafeAreaView } from 'r
 import paletteColor from '../PaletteColor/paletteColor';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageClass'
-/*
-tests I need to do:
-
-What will happen if I remove all cards from the card array?
-
-*/
-
 
 export default function ReviewCard({route,navigation}){
 
@@ -43,19 +36,22 @@ export default function ReviewCard({route,navigation}){
         const cardToBeRemoved = sortedCard
         
         try{
+
+            if(!sortedCard) throw new Error('Card error')
+
             let cardsReturnRemo = await unlearnedCard.removeCard(cardToBeRemoved)
 
             if(!cardsReturnRemo) throw new Error("Card removal error")
             
             setCards(cardsReturnRemo)
-            setSortedCard(getAnElementFromArrayRandomly(cardsReturnRemo))
+            cardsReturnRemo.length > 0 ? setSortedCard(getAnElementFromArrayRandomly(cardsReturnRemo)) : setSortedCard(null)
 
             let cardsReturnRemoAdd = await learnedCard.addingALearnedCard(sortedCard)
             
             if(!cardsReturnRemoAdd) throw new Error("Card insertion error")
 
             const cardLearnedafterChanging = await learnedCard.gettingDataAllSubject()
-            console.log(cardLearnedafterChanging)
+            console.log('after changing',cardLearnedafterChanging)
 
         }catch(e){
             console.log('something went wrong',e.message)
@@ -70,7 +66,7 @@ export default function ReviewCard({route,navigation}){
         <View style = {styles.CardView}>
 
             <View style ={styles.questionView}>
-                <Text style = {styles.questionTitle}>{sortedCard?Object.keys(sortedCard):null}</Text>
+                <Text style = {styles.questionTitle}>{sortedCard?Object.keys(sortedCard):<Text style = {styles.zeroCardsleft} >No Cards</Text>}</Text>
             </View>
             <View style = {styles.ButtonView}>
 
@@ -104,7 +100,6 @@ export default function ReviewCard({route,navigation}){
 
 const styles = StyleSheet.create({
 
-
     ReviewCard:{
         flex:1,
         flexDirection:'column',
@@ -126,10 +121,13 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         padding:'5%',
         elevation:3,
-        marginHorizontal:'2%'
+        marginHorizontal:'2%',
     },
     questionTitle:{
         fontSize:20,
+    },
+    zeroCardsleft:{
+        
     },
     outcomeButton:{
         padding:'5%',
