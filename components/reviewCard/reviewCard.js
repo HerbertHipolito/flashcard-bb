@@ -9,12 +9,10 @@ export default function ReviewCard({route,navigation}){
     const [cards,setCards] = useState(null);
     const [seeOutcome,setSeeOutcome] = useState(false);
     const [sortedCard,setSortedCard] = useState(null);
-    //const [learnedCard,setLearnedCard] = useState({});
     const [unlearnedCard, setUnlearnedCard] = useState(null);
     const [learnedCard, setLearnedCard] = useState(null);
 
     useEffect(()=>{
-        
             
             const StorageCardsUnlearned = new myStorageClass('@my_cards',navigation,route.params.materia)
             const StorageCardsLearned = new myStorageClass('@cards_learned',navigation,route.params.materia)
@@ -50,8 +48,6 @@ export default function ReviewCard({route,navigation}){
             
             if(!cardsReturnRemoAdd) throw new Error("Card insertion error")
 
-            const cardLearnedafterChanging = await learnedCard.gettingDataAllSubject()
-            console.log('after changing',cardLearnedafterChanging)
 
         }catch(e){
             console.log('something went wrong',e.message)
@@ -79,16 +75,21 @@ export default function ReviewCard({route,navigation}){
                 </TouchableOpacity>
                 
                 <TouchableOpacity onPress = {e => {
+
+                    cards.length===1?setSortedCard(cards[0]):
+                    cards.length===0?setSortedCard(null):
                     setSortedCard(getAnElementFromArrayRandomly(cards))
+                    
                     if(seeOutcome) setSeeOutcome(!seeOutcome)
                     }}>
+
                     <Icon style = {styles.dontKnowButton} name="dangerous" size={60} color="#424F76" />
                 </TouchableOpacity>
 
             </View>
             {seeOutcome?
             <View style= {styles.answerView}>
-                <Text style = {styles.answerText}>{sortedCard[Object.keys(sortedCard)]}</Text>
+                <Text style = {styles.answerText}>{sortedCard?sortedCard[Object.keys(sortedCard)]:'??????'}</Text>
             </View>:null}   
 
         </View>

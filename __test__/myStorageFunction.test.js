@@ -1,5 +1,3 @@
-//import {myStorageClass,getAnElementFromArrayRandomly} from '../myStorageFunction'
-
 function getAnElementFromArrayRandomly(array) {
 
     if(array.length===0) return null;

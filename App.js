@@ -16,7 +16,6 @@ const Stack = createStackNavigator();
 to do list:
 
 Fix the bug that occurs when the user clicks on the 'ver resposta' button as there is no card to review.
-Fix the bug that does not show the msg after deleting the last learned card.
 
 */
 
