@@ -1,35 +1,20 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import QuestionButtons from './questionButtons/questionButtons';
 
 export default function MakeQuestion({route,navigation}){
 
     return <View style = {styles.containerQuestion} >
-        {console.log(route.params.materia)}
         <View>
             <Text style = {styles.titleQuestion}> Você deseja? </Text>
         </View>
 
-        <Icon name="payment" size={160} color="#424F76" />
-
-        <View>
-
-            <View style = {styles.buttonsView}> 
-                <TouchableOpacity onPress={e => navigation.navigate('newCard',{materia:route.params.materia})}>
-                    <Text style = {styles.questionButtons}> Criar cards </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={e => navigation.navigate('ReviewCard',{materia:route.params.materia})}>
-                    <Text style = {styles.questionButtons}> Revisar Cards </Text>
-                </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity onPress = {e => navigation.navigate('showLearnedCards',{materia:route.params.materia})}>
-                <Text style = {styles.seeLearnedButton}> Ver cards aprendidos </Text>
-            </TouchableOpacity>
-
-        </View>
-
+        <Icon name="payment" size={160} color={paletteColor.thirdColor} />
+        
+        <QuestionButtons route={route} navigation = {navigation} />
+        
     </View>
 }
 
@@ -59,7 +44,10 @@ const styles = StyleSheet.create({
         backgroundColor:paletteColor.secondColor,
         paddingVertical:10,
         paddingHorizontal:6,
-        marginHorizontal:15
+        marginHorizontal:15,
+    },
+    questionButtonsHover:{
+        backgroundColor:'black'
     },
     seeLearnedButton:{
         fontSize:20,

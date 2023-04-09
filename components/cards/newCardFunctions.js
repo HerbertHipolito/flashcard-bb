@@ -28,8 +28,9 @@ export const checkSameQuestion = (question, currentCards, subject) =>{
 }
 
 export const RegexValidation = (input) => {
-    let regex = /[A-Za-z0-9]/;
-    return regex.test(input);
+    if (input === '') return false
+    let regex = /[^\w\s]/gi;
+    return !regex.test(input);
 }
 
 export const handleSubmit = (questionInput, answerInput, currentCards, subject) =>{

@@ -17,7 +17,6 @@ export default function NewCards({route,navigation}){
     const [currentCards, setCurrentCards] = useState(null)
     const [errorMessage, setErrorMessage] = useState(null)
 
-
     useEffect(()=>{
 
         const getData = async () => {
@@ -72,8 +71,6 @@ export default function NewCards({route,navigation}){
         <View>
             <Text style = {styles.NewCardTitle}> Novo card  </Text>
         </View>
-
-        {console.log(currentCards)}
 
         <Text style = {styles.novoCardText}><Text style = {styles.materia}> Materia: {route.params.materia} </Text></Text>
         <View style = {styles.TextInputView}> 

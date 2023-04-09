@@ -60,7 +60,7 @@ export default function ReviewCard({route,navigation}){
         <View style = {styles.CardView}>
 
             <View style ={styles.questionView}>
-                <Text style = {styles.questionTitle}>{sortedCard?Object.keys(sortedCard):<Text style = {styles.zeroCardsleft} >No Cards</Text>}</Text>
+                <Text style = {styles.questionText}>{sortedCard?Object.keys(sortedCard):<Text style = {styles.zeroCardsleft} >No Cards</Text>}</Text>
             </View>
 
             <View style = {styles.ButtonView}>
@@ -124,11 +124,12 @@ const styles = StyleSheet.create({
         elevation:3,
         marginHorizontal:'2%',
     },
-    questionTitle:{
+    questionText:{
         fontSize:20,
+        color:paletteColor.fontColor
     },
     zeroCardsleft:{
-        
+        color:paletteColor.fontColor
     },
     outcomeButton:{
         padding:'5%',
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
         backgroundColor:paletteColor.secondColor,
         elevation: 2,
         textAlign:'center',
+        color:paletteColor.fontColor
     },
     answerText:{
         backgroundColor:paletteColor.secondColor,
@@ -145,7 +147,9 @@ const styles = StyleSheet.create({
         marginVertical:'5%',
         padding:'5%',
         alignSelf:'center',
-        minWidth:'5%'
+        minWidth:'70%',  
+        color:paletteColor.fontColor,
+        marginHorizontal:'5%'       
     },
     ButtonView:{
         flexDirection:'row',

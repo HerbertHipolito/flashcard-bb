@@ -9,7 +9,7 @@ export default function Welcome({navigation}){
 
         <Text style = {styles.title} >Bem-vindo!</Text>
         
-        <Icon name="school" size={160} color="#424F76" />
+        <Icon name="school" size={160} color={paletteColor.thirdColor} />
 
         <Text style = {styles.phare} >
             Aprenda a sua materia de forma rápida e eficiente!
@@ -35,12 +35,14 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:50,
+        color:paletteColor.fontColor,
         fontFamily:paletteColor.fontFamily,
     },
     phare:{
         fontSize:23,
         marginHorizontal:10,
         textAlign:'center',
+        color:paletteColor.fontColor,
         fontFamily:paletteColor.fontFamily,
     },
     buttons_view:{
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         marginHorizontal:25,
         minWidth:'30%',
+        color:paletteColor.fontColor,
         textAlign:'center'
     },
 

@@ -4,8 +4,6 @@ import paletteColor from '../PaletteColor/paletteColor';
 import {myStorageClass} from '../../myStorageClass';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-//fix the loading icon location.
-
 export default function ShowLearnedCards({route,navigation}){
 
     const [allLearnedCards, setAllLearnedCards] = useState(null)
@@ -51,11 +49,10 @@ export default function ShowLearnedCards({route,navigation}){
 
                         </View>:null}
                 }
-
             }/>:
             <Text style={styles.noCard}> Não há cards </Text>:
-            <View >
-                <ActivityIndicator size="large" /><Text>Carregando dados dos deputados</Text>
+            <View style={styles.LoadingIcon} >
+                <ActivityIndicator size="large" /><Text style={styles.loadingText}>Carregando cards</Text>
             </View>}
         </View>
 
@@ -76,18 +73,22 @@ const styles = StyleSheet.create({
     titleView1:{
         fontSize:18,
         textAlign:'center',
+        color:paletteColor.fontColor,
         marginBottom:'3%',
     },
     titleView2:{
-        fontSize:30,
+        fontSize:35,
         textAlign:'center',
+        color:paletteColor.fontColor,
+        marginVertical:'5%'
     },
     cardView:{
         backgroundColor: paletteColor.secondColor,
-        padding:'2%',
+        paddingVertical:'2%',
+        paddingHorizontal:'5%',
         margin:'5%',
         maxWidth:'90%',
-        minWidth:'70%',
+        minWidth:'90%',
         alignSelf:'center'
 
     },
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
         fontFamily:paletteColor.FontFamily,
         fontSize:15,
         marginVertical:'5%',
+        color:paletteColor.fontColor,
         textAlign:'center',
         flexDirection:'column',
         paddingBottom:10
@@ -109,8 +111,15 @@ const styles = StyleSheet.create({
         alignItems:'flex-end',
     },
     noCard:{
-        paddingVertical:'10%',
-        fontSize:25
+        fontSize:25,
+    },
+    LoadingIcon:{
+        marginTop:'50%'       
+    },
+    loadingText:{
+        fontSize:30,
+        fontFamily:paletteColor.FontFamily,
+        color:paletteColor.fontColor
     }
 
 })

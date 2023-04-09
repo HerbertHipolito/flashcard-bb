@@ -9,9 +9,10 @@ describe('RegexValidation', () => {
     
     expect(RegexValidation('')).toBe(false)
     expect(RegexValidation('dasdia339820fe')).toBe(true)
-    expect(RegexValidation('12312e21:ç~]ç[[´çç[')).toBe(true)
+    expect(RegexValidation('12312e21:ç~]ç[[´çç[')).toBe(false)
     expect(RegexValidation("!@#$%^&*()_+-=")).toBe(false) // only non-alphanumeric characters
     expect(RegexValidation("你好世界")).toBe(false) // non-Latin script characters
+    expect(RegexValidation('h*rb*rt h!p0l!to')).toBe(false)
 
   })
 
