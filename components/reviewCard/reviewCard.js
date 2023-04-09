@@ -62,10 +62,11 @@ export default function ReviewCard({route,navigation}){
             <View style ={styles.questionView}>
                 <Text style = {styles.questionTitle}>{sortedCard?Object.keys(sortedCard):<Text style = {styles.zeroCardsleft} >No Cards</Text>}</Text>
             </View>
+
             <View style = {styles.ButtonView}>
 
                 <TouchableOpacity onPress = {e=>LearnedCardHandler()}>
-                    <Icon  style={styles.rightButton} name="verified" size={60} color="#424F76" />
+                    <Icon name="verified" size={60} color={paletteColor.greenRight} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress = {e=>setSeeOutcome(!seeOutcome)}>
@@ -81,7 +82,7 @@ export default function ReviewCard({route,navigation}){
                     if(seeOutcome) setSeeOutcome(!seeOutcome)
                     }}>
 
-                    <Icon style = {styles.dontKnowButton} name="dangerous" size={60} color="#424F76" />
+                    <Icon name="dangerous" size={60} color={paletteColor.redDelete} />
                 </TouchableOpacity>
 
             </View>
@@ -115,7 +116,8 @@ const styles = StyleSheet.create({
     questionView:{
         marginVertical:'5%',
         minHeight:'30%',
-        minWidth:'80%',
+        minWidth:'90%',
+        maxWidth:'90%',
         backgroundColor:paletteColor.secondColor,
         alignSelf:'center',
         padding:'5%',
@@ -130,11 +132,11 @@ const styles = StyleSheet.create({
     },
     outcomeButton:{
         padding:'5%',
-        minWidth:'5%',
+        minWidth:'35%',
         alignSelf:'center',
         backgroundColor:paletteColor.secondColor,
-        elevation: 4,
-
+        elevation: 2,
+        textAlign:'center',
     },
     answerText:{
         backgroundColor:paletteColor.secondColor,
