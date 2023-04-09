@@ -21,9 +21,7 @@ export default function ReviewCard({route,navigation}){
             setLearnedCard(StorageCardsLearned)
             
             StorageCardsUnlearned.loadingCards(true,true,setCards).then(cards =>{
-                console.log(cards)
                 setSortedCard(getAnElementFromArrayRandomly(cards))
-
             })
             StorageCardsLearned.loadingCards(false,false,setCards)
 

@@ -17,7 +17,6 @@ export const materiaTransformada = (transformarKeys,subject) =>{
 export const checkSameQuestion = (question, currentCards, subject) =>{
 
     let cardExist = false
-    console.log(currentCards,materiaTransformada(transformarKeys,subject),transformarKeys,subject)
     for (card of currentCards[materiaTransformada(transformarKeys,subject)]){
         if(Object.keys(card)[0] === question){
             cardExist = true

@@ -43,8 +43,6 @@ export default function NewCards({route,navigation}){
 
         keyTransformada2 = materiaTransformada(transformarKeys,route.params.materia)
 
-        console.log(keyTransformada2,newCards)
-
         newCards[keyTransformada2].push({[questionCard]:answerCard}) 
         setCurrentCards(newCards)
         setErrorMessage(null)

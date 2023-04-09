@@ -11,14 +11,6 @@ import ShowLearnedCards from './components/AllLearnedCards/learnedCard';
 
 const Stack = createStackNavigator();
 
-/*
-
-to do list:
-
-Fix the bug that occurs when the user clicks on the 'ver resposta' button as there is no card to review.
-
-*/
-
 export default function App() {
   return (
     <NavigationContainer>

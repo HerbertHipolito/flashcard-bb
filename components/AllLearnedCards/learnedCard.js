@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor';
 import {myStorageClass} from '../../myStorageClass';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+//fix the loading icon location.
 
 export default function ShowLearnedCards({route,navigation}){
 
     const [allLearnedCards, setAllLearnedCards] = useState(null)
     const [LearnedCardStorage,setLearnedCardsStorage] = useState(null)
-    const [noCardMessage,setNoCardMessage] = useState(false)
 
     useEffect(() =>{
 
@@ -23,7 +23,7 @@ export default function ShowLearnedCards({route,navigation}){
     const removeACard = async (card) =>{
 
         const cardLeft = await LearnedCardStorage.removeCard(card)
-        setAllLearnedCards(cardLeft.length!==0?cardLeft:null)
+        setAllLearnedCards(cardLeft.length!==0?cardLeft:[])
 
     }
 
@@ -35,7 +35,8 @@ export default function ShowLearnedCards({route,navigation}){
 
         <View>
             
-            {allLearnedCards?<FlatList data = {allLearnedCards}
+            {allLearnedCards?
+            allLearnedCards.length!==0?<FlatList data = {allLearnedCards}
             
             renderItem = {
                 (card,index) =>{
@@ -51,7 +52,11 @@ export default function ShowLearnedCards({route,navigation}){
                         </View>:null}
                 }
 
-            }/>:<Text style={styles.noCard}> Não há cards </Text>}
+            }/>:
+            <Text style={styles.noCard}> Não há cards </Text>:
+            <View >
+                <ActivityIndicator size="large" /><Text>Carregando dados dos deputados</Text>
+            </View>}
         </View>
 
     </SafeAreaView>
