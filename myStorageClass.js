@@ -5,7 +5,7 @@ import transformarKeys from './data/transformarKeys';
 
 export class myStorageClass{
 
-    constructor(key,navigation,subject){
+    constructor(key=null,navigation=null,subject=null){
 
         this.key = key // the key of the storage data.
         this.navigation = navigation
@@ -33,6 +33,17 @@ export class myStorageClass{
         return jsonValue?true:false
     }
 
+    async clearAllData(){
+
+        try {
+            const savedUser = await AsyncStorage.clear();
+        } catch (e) {
+            this.errorAlert(line2='error during clearAllData')
+            console.log(e.message);
+        }
+
+    }
+
     async initializingCreateStorage(){
 
         try {
@@ -41,9 +52,7 @@ export class myStorageClass{
             this.JsonSubject = jsonValue
             let result = null
 
-            if(jsonValue) {
-                jsonValue = JSON.parse(jsonValue)
-            }else{
+            if(!jsonValue) {
                 jsonValue = JSON.stringify({
                     Portugues:[],
                     ingles:[], 
@@ -56,7 +65,7 @@ export class myStorageClass{
                 await AsyncStorage.setItem(this.key, jsonValue)
             }
 
-            return jsonValue    
+            return JSON.parse(jsonValue)
     
         } catch(e) {
             console.log(e.message)

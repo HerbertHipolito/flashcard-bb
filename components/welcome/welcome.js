@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import paletteColor from '../PaletteColor/paletteColor'
+import paletteColor from '../PaletteColor/paletteColor';
 
 export default function Welcome({navigation}){
 
