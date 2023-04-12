@@ -9,7 +9,6 @@ export class myStorageClass{
 
         this.key = key // the key of the storage data.
         this.navigation = navigation
-        this.JsonSubject = null
         this.subject = subject
 
     }
@@ -49,7 +48,6 @@ export class myStorageClass{
         try {
 
             let jsonValue = await AsyncStorage.getItem(this.key) 
-            this.JsonSubject = jsonValue
             let result = null
 
             if(!jsonValue) {
@@ -95,11 +93,12 @@ export class myStorageClass{
 
             let subjects = await this.gettingDataAllSubject()
 
+            if(!subjects) return false
+
             const newArray = subjects[materiaTransformada(transformarKeys,this.subject)].filter(card => {
                 if(card===null) return null;
                 return Object.keys(card)[0] !== Object.keys(cardToRemove)[0]?card:null
             });
-
             subjects[materiaTransformada(transformarKeys,this.subject)] = newArray
 
             await AsyncStorage.setItem(this.key,JSON.stringify(subjects))
@@ -157,7 +156,6 @@ export class myStorageClass{
                 setCards(myCards)
             }
             
-            this.JsonSubject = data
             return myCards
             
         }

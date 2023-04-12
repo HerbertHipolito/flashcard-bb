@@ -2,23 +2,13 @@
 //https://react-native-async-storage.github.io/async-storage/docs/advanced/jest
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {myStorageClass} from '../myStorageClass' 
-
-//The fakeStore object is used to simulate the Android Local Storage in the AsyncStorage mocked methods.
-
-const fakeStore = {
-    '@key1':JSON.stringify({'key1':'value1','key2':'value2'}),
-    '@key2':JSON.stringify({'key3':'value3','key4':'value4'})
-}
+import {myStorageClass} from '../myStorageClass'
+import fakeData from '../data/fakeData' 
 
 AsyncStorage.getItem = jest.fn(key => {
 
-    let data = null
-
-    if(key==='@key1') data = fakeStore[key]
-    else if(key==='@key2') data = fakeStore[key]
-    
-    return data
+    if (!fakeData.hasOwnProperty(key)) return null
+    return fakeData[key]
 
 });
 
@@ -53,8 +43,8 @@ describe('StorageFunction class validation', ()=>{
 
     it(' checks my async Storage.getItem mocked method', async () => {
 
-        expect(AsyncStorage.getItem('@key1')).toStrictEqual(fakeStore['@key1']);
-        expect(AsyncStorage.getItem('@key2')).toStrictEqual(fakeStore['@key2']);
+        expect(AsyncStorage.getItem('@key1')).toStrictEqual(fakeData['@key1']);
+        expect(AsyncStorage.getItem('@key2')).toStrictEqual(fakeData['@key2']);
         expect(AsyncStorage.getItem('@key1231231')).toBe(null); 
 
     })
@@ -72,19 +62,60 @@ describe('StorageFunction class validation', ()=>{
         }
 
         const storage1 = new myStorageClass('@key1',null,'ingles');
-        expect(await storage1.initializingCreateStorage()).toStrictEqual(JSON.parse(fakeStore['@key1']));
+        expect(await storage1.initializingCreateStorage()).toStrictEqual(JSON.parse(fakeData['@key1']));
 
         const storage2 = new myStorageClass('@key2',null,'ingles');
-        expect(await storage2.initializingCreateStorage()).toStrictEqual(JSON.parse(fakeStore['@key2']));
+        expect(await storage2.initializingCreateStorage()).toStrictEqual(JSON.parse(fakeData['@key2']));
 
         const storage3 = new myStorageClass('@keyThatDoesNotExistInMyStore',null,'ingles');
         expect(await storage3.initializingCreateStorage()).toStrictEqual(newData);
-
+        
         expect(AsyncStorage.setItem).toBeCalledWith('@keyThatDoesNotExistInMyStore',JSON.stringify(newData));
 
 
     })
 
+    
+    it(' should validate the loadingCards method', async () =>{
+
+        const storage = new myStorageClass('@key1',null,'ingles');
+        
+        expect(await storage.loadingCards(false,false)).toStrictEqual(JSON.parse(fakeData['@key1'])['ingles'])
+        expect(await storage.loadingCards(false,false)).not.toStrictEqual(JSON.parse(fakeData['@key2'])['ingles'])
+        
+        storage.subject = 'Conh. Bancários' // testing using another subject
+
+        expect(await storage.loadingCards(false,false)).toStrictEqual(JSON.parse(fakeData['@key1'])['Conh_Bancários'])
+        expect(await storage.loadingCards(false,false)).not.toStrictEqual(JSON.parse(fakeData['@key2'])['Conh_Bancários'])
+
+        storage.key = '@keyThatDoesNotExistInMyFakeData' // testing using a non-existent key
+
+        expect(await storage.loadingCards(false,false)).toStrictEqual([])
+
+
+    })
+
+    it(' should validate the removeCard method', async () =>{
+
+        const storage = new myStorageClass('@key1',null,'ingles');
+
+        expect(await storage.removeCard({'key2':'value2'})).toStrictEqual([{'key1':'value1'},{'key3':'value3'},{'key4':'value4'}])
+
+        storage.subject = 'Conh. Bancários' // testing using another subject with any card registered
+
+        expect(await storage.removeCard({'key2':'value2'})).toStrictEqual([])
+
+        storage.key = '@keyThatDoesNotExistInMyFakeData'
+
+        expect(await storage.removeCard({'key2':'value2'})).toBe(false)
+
+        storage.key = '@key2'
+        storage.subject = 'Conh. Bancários'
+
+        expect(await storage.removeCard({'key2':'value2'})).toStrictEqual([{'key1':'value1'}])
+
+    })
+    
 
 
 })
