@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+//import Icon from 'react-native-vector-icons/MaterialIcons';
 import paletteColor from '../PaletteColor/paletteColor';
+import { Ionicons } from '@expo/vector-icons'; 
+//<Icon name="school" size={160} color={paletteColor.thirdColor} />
+
 
 export default function Welcome({navigation}){
 
@@ -9,7 +12,7 @@ export default function Welcome({navigation}){
 
         <Text style = {styles.title} >Bem-vindo!</Text>
         
-        <Icon name="school" size={160} color={paletteColor.thirdColor} />
+        <Ionicons name="school" size={160} color={paletteColor.thirdColor} />
 
         <Text style = {styles.phare} >
             Aprenda a sua materia de forma rápida e eficiente!

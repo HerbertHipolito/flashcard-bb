@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor';
 import {myStorageClass} from '../../myStorageClass';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+//import Icon from 'react-native-vector-icons/MaterialIcons';
+import { AntDesign } from '@expo/vector-icons';
+//<Icon name="delete" size={30} color="#424F76" /> 
 
 export default function ShowLearnedCards({route,navigation}){
 
@@ -41,7 +43,7 @@ export default function ShowLearnedCards({route,navigation}){
                     {return card.item?<View key ={index}  style = {styles.cardView}>
                             <View style = {styles.iconView}>
                                 <TouchableOpacity onPress = {e=>{removeACard(card.item)}}style={styles.icon}>
-                                    <Icon name="delete" size={30} color="#424F76" /> 
+                                    <AntDesign name="delete" size={24} color="black" />
                                 </TouchableOpacity>
                             </View>
                             <Text style = {styles.cardViewText} >{Object.keys(card.item)}</Text>

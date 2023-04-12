@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+//import Icon from 'react-native-vector-icons/MaterialIcons';
 import QuestionButtons from './questionButtons/questionButtons';
+import { MaterialIcons } from '@expo/vector-icons'; 
+//<Icon name="payment" size={160} color={paletteColor.thirdColor} />
 
 export default function MakeQuestion({route,navigation}){
 
@@ -11,7 +13,7 @@ export default function MakeQuestion({route,navigation}){
             <Text style = {styles.titleQuestion}> Você deseja? </Text>
         </View>
 
-        <Icon name="payment" size={160} color={paletteColor.thirdColor} />
+        <MaterialIcons name="payment" size={160} color={paletteColor.thirdColor} />
         
         <QuestionButtons route={route} navigation = {navigation} />
         

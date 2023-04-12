@@ -14,7 +14,6 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View  style={{ flex: 1, backgroundColor:paletteColor.backgroundColor }} >
       <NavigationContainer >
 
         <Stack.Navigator initialRouteName = "Welcome" screenOptions={{
@@ -35,6 +34,5 @@ export default function App() {
           </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
-    </View>
   );
 }

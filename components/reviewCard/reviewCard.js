@@ -1,8 +1,12 @@
 import {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import paletteColor from '../PaletteColor/paletteColor';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+//import Icon from 'react-native-vector-icons/MaterialIcons';
 import {myStorageClass ,getAnElementFromArrayRandomly} from '../../myStorageClass'
+import { MaterialIcons } from '@expo/vector-icons'; 
+//<Icon name="verified" size={60} color={paletteColor.greenRight} />
+//<Icon name="dangerous" size={60} color={paletteColor.redDelete} />
+
 
 export default function ReviewCard({route,navigation}){
 
@@ -66,7 +70,7 @@ export default function ReviewCard({route,navigation}){
             <View style = {styles.ButtonView}>
 
                 <TouchableOpacity onPress = {e=>LearnedCardHandler()}>
-                    <Icon name="verified" size={60} color={paletteColor.greenRight} />
+                    <MaterialIcons name="verified" size={60} color={paletteColor.greenRight} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress = {e=>setSeeOutcome(!seeOutcome)}>
@@ -82,7 +86,7 @@ export default function ReviewCard({route,navigation}){
                     if(seeOutcome) setSeeOutcome(!seeOutcome)
                     }}>
 
-                    <Icon name="dangerous" size={60} color={paletteColor.redDelete} />
+                    <MaterialIcons name="dangerous" size={60} color={paletteColor.redDelete} />
                 </TouchableOpacity>
 
             </View>
