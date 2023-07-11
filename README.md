@@ -5,6 +5,10 @@ Assim, a constante repetição da visualização das cartas facilita/solidifica 
 Para cada matéria desse concurso, o usuário pode guardar um conjunto de cartas para poder vê-las posteriormente. 
 O usuário pode também ver todas as cartas aprendidas.
 
+<div align="center">
+  <video  src = "https://github.com/HerbertHipolito/flashcard-bb/assets/94997683/d8395c19-7b7c-49bf-9516-1161df331aef" width=400 />
+</div>
+
 > Tecnologias utilizadas: React Native, JavaScript e Jest.
 
 # Principais funcionalidades
